@@ -25,13 +25,7 @@
         }
         .header { text-align: center; margin-bottom: 20px; }
         .icon { font-size: 56px; margin-bottom: 10px; }
-        h1 {
-            font-size: 28px;
-            background: linear-gradient(135deg, #fff, #c084fc);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
+        h1 { font-size: 28px; color: #fff; margin-bottom: 5px; }
         .sub { color: #a78bfa; font-size: 13px; }
         .tariff-btn {
             background: linear-gradient(135deg, #1e1a2e 0%, #2d1b4e 100%);
@@ -45,10 +39,7 @@
             cursor: pointer;
             transition: all 0.2s;
         }
-        .tariff-btn.selected {
-            border: 2px solid #c084fc;
-            background: linear-gradient(135deg, #2d1b4e 0%, #3d2068 100%);
-        }
+        .tariff-btn.selected { border: 2px solid #c084fc; background: #3d2068; }
         .tariff-name { font-weight: 700; font-size: 16px; }
         .tariff-price { color: #facc15; font-weight: 800; font-size: 20px; }
         .trial-badge {
@@ -71,11 +62,7 @@
             cursor: pointer;
             margin-top: 20px;
         }
-        .pay-btn.disabled {
-            background: #4a4a5a;
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
+        .pay-btn.disabled { background: #4a4a5a; opacity: 0.6; cursor: not-allowed; }
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -91,25 +78,13 @@
             margin: 0 auto;
             width: 100%;
         }
-        .nav-item {
-            text-align: center;
-            cursor: pointer;
-            padding: 8px 24px;
-            border-radius: 40px;
-            color: #7c6b8f;
-        }
+        .nav-item { text-align: center; cursor: pointer; padding: 8px 24px; border-radius: 40px; color: #7c6b8f; }
         .nav-item.active { color: #c084fc; background: rgba(192, 132, 252, 0.15); }
         .nav-icon { font-size: 24px; display: block; }
         .nav-label { font-size: 11px; }
         .page { display: none; }
         .page.show { display: block; }
-        .help-step {
-            background: rgba(30, 25, 55, 0.6);
-            border-radius: 18px;
-            padding: 14px;
-            margin-bottom: 12px;
-            border-left: 3px solid #c084fc;
-        }
+        .help-step { background: rgba(30, 25, 55, 0.6); border-radius: 18px; padding: 14px; margin-bottom: 12px; border-left: 3px solid #c084fc; }
     </style>
 </head>
 <body>
@@ -119,12 +94,10 @@
         <div class="header">
             <div class="icon">🛡️⚔️</div>
             <h1>CRUSADE SHIELD</h1>
-
-> ㅤMiroslav:
-<div class="sub">Защитник сети • Непоколебимая защита</div>
+            <div class="sub">Защитник сети • Непоколебимая защита</div>
         </div>
         <div class="card">
-            <div style="text-align: center; padding: 10px;">
+            <div style="text-align: center;">
                 <div style="font-size: 14px; color: #a78bfa;">Статус подписки</div>
                 <div style="font-size: 20px; font-weight: 800; margin-top: 5px;" id="statusText">⚪ Не активна</div>
             </div>
@@ -133,12 +106,10 @@
 
     <div id="pageTariffs" class="page">
         <div class="card">
-            <h2 style="margin-bottom: 20px; text-align: center;">📋 Тарифные планы</h2>
+<h2 style="margin-bottom: 20px; text-align: center;">📋 Тарифные планы</h2>
             <div id="tariffsList"></div>
             <button class="pay-btn disabled" id="payBtn">💳 Оплатить</button>
-            <div style="text-align: center; font-size: 12px; color: #a78bfa; margin-top: 16px;">
-                💳 После оплаты ключ придёт в Telegram бот<br>🔗 До 5 устройств
-            </div>
+            <div style="text-align: center; font-size: 12px; color: #a78bfa; margin-top: 16px;">💳 После оплаты ключ придёт в Telegram бот</div>
         </div>
     </div>
 
@@ -148,7 +119,6 @@
             <div class="help-step"><b>1️⃣ Выберите тариф</b><br>Нажмите на тариф и затем «Оплатить»</div>
             <div class="help-step"><b>2️⃣ Получите ключ</b><br>Бот пришлёт VPN-ссылку в чат</div>
             <div class="help-step"><b>3️⃣ Импортируйте в Happ</b><br>Вставьте ссылку → Подключитесь</div>
-            <div class="help-step"><b>4️⃣ Поделитесь с друзьями</b><br>Один ключ работает на 5 устройствах</div>
         </div>
     </div>
 </div>
@@ -164,28 +134,24 @@
     let selectedTariff = null;
 
     const tariffs = [
-        { name: "Пробный 3 дня", price: 49, days: 3, devices: 5, trial: true },
-        { name: "1 месяц", price: 149, days: 30, devices: 5, trial: false },
-        { name: "3 месяца", price: 399, days: 90, devices: 5, trial: false },
-        { name: "6 месяцев", price: 749, days: 180, devices: 5, trial: false },
-        { name: "12 месяцев", price: 1349, days: 365, devices: 5, trial: false }
+        { name: "Пробный 3 дня", price: 49, days: 3 },
+        { name: "1 месяц", price: 149, days: 30 },
+        { name: "3 месяца", price: 399, days: 90 },
+        { name: "6 месяцев", price: 749, days: 180 },
+        { name: "12 месяцев", price: 1349, days: 365 }
     ];
 
     function selectTariff(tariff) {
         selectedTariff = tariff;
+        document.querySelectorAll('.tariff-btn').forEach(btn => btn.classList.remove('selected'));
         document.querySelectorAll('.tariff-btn').forEach(btn => {
-            btn.classList.remove('selected');
             if (btn.getAttribute('data-days') == tariff.days) btn.classList.add('selected');
         });
         document.getElementById('payBtn').classList.remove('disabled');
     }
 
-    function sendPaymentToBot() {
-        if (!selectedTariff) {
-            alert('❌ Выберите тариф');
-            return;
-        }
-
+    function sendPayment() {
+        if (!selectedTariff) { alert('Выберите тариф'); return; }
         if (tg) {
             tg.sendData(JSON.stringify({
                 action: 'payment',
@@ -193,10 +159,10 @@
                 price: selectedTariff.price,
                 name: selectedTariff.name
             }));
-            alert('✅ Запрос отправлен! Ключ придёт в чат с ботом.');
+            alert('Запрос отправлен! Ключ придёт в чат.');
             tg.close();
         } else {
-            alert('❌ Откройте это приложение в Telegram');
+            alert('Откройте это приложение в Telegram');
         }
     }
 
@@ -207,17 +173,8 @@
             const div = document.createElement('div');
             div.className = 'tariff-btn';
             div.setAttribute('data-days', t.days);
-            div.innerHTML = `
-                <div>
-                    <div class="tariff-name">${t.name} ${t.trial ? '<span class="trial-badge">🔥 Пробный</span>' : ''}</div>
-                    <div style="font-size: 11px; color:#a78bfa;">${t.days} дней • до ${t.devices} устройств</div>
-                </div>
-                <div class="tariff-price">${t.price}₽</div>
-            `;
-            div.
-
-> ㅤMiroslav:
-onclick = () => selectTariff(t);
+            div.innerHTML = <div><div class="tariff-name">${t.name} ${t.days == 3 ? '<span class="trial-badge">🔥</span>' : ''}</div><div style="font-size:11px;color:#a78bfa;">${t.days} дней</div></div><div class="tariff-price">${t.price}₽</div>;
+            div.onclick = () => selectTariff(t);
             container.appendChild(div);
         });
     }
@@ -232,12 +189,9 @@ onclick = () => selectTariff(t);
         if (pageId === 'tariffs') renderTariffs();
     }
 
-    if (tg) {
-        tg.expand();
-        tg.ready();
-    }
+    if (tg) { tg.expand(); tg.ready(); }
 
-    document.getElementById('payBtn').onclick = sendPaymentToBot;
+    document.getElementById('payBtn').onclick = sendPayment;
     document.querySelectorAll('.nav-item').forEach(btn => {
         btn.onclick = () => showPage(btn.getAttribute('data-page'));
     });
