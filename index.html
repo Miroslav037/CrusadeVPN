@@ -150,6 +150,8 @@
         }
 
         .tariff-btn.selected {
+
+> ㅤMiroslav:
 border: 2px solid #c084fc;
             background: linear-gradient(135deg, #2d1b4e 0%, #3d2068 100%);
             box-shadow: 0 0 15px rgba(192, 132, 252, 0.4);
@@ -295,6 +297,8 @@ border: 2px solid #c084fc;
     <div id="page3" class="page">
         <div class="card">
             <h2 style="margin-bottom: 20px; text-align: center;">📘 Как использовать</h2>
+
+> ㅤMiroslav:
 <div class="help-step"><b>1️⃣ Купите подписку</b><br>Выберите тариф и оплатите через ЮKassa</div>
             <div class="help-step"><b>2️⃣ Получите ключ в боте</b><br>После оплаты бот пришлёт вам конфиг</div>
             <div class="help-step"><b>3️⃣ Импортируйте в приложение</b><br>Happ, v2rayNG, Nekobox или любой другой клиент</div>
@@ -321,23 +325,20 @@ border: 2px solid #c084fc;
 <script>
     let isSubscribed = false;
     let selectedTariff = null;
-
+    
     const tariffs = [
         { name: "1 месяц", price: "149 ₽", days: 30 },
         { name: "3 месяца", price: "400 ₽", days: 90 },
         { name: "6 месяцев", price: "750 ₽", days: 180 },
         { name: "12 месяцев", price: "1350 ₽", days: 365 }
-        { name: "3 месяца", price: "399 ₽", days: 90 },
-        { name: "6 месяцев", price: "749 ₽", days: 180 },
-        { name: "12 месяцев", price: "1349 ₽", days: 365 }
     ];
-
+    
     const statusLed = document.getElementById('statusLed');
     const statusTextSpan = document.getElementById('statusText');
     const activateBtn = document.getElementById('activateBtn');
     const payButtonContainer = document.getElementById('payButtonContainer');
     const payBtn = document.getElementById('payBtn');
-
+    
     function updateStatus() {
         if (isSubscribed) {
             statusLed.classList.add('active');
@@ -349,13 +350,13 @@ border: 2px solid #c084fc;
             activateBtn.innerText = "Активировать";
         }
     }
-
+    
     function getExpiryDate() {
         let d = new Date();
         d.setMonth(d.getMonth() + 1);
         return d.toLocaleDateString();
     }
-
+    
     function selectTariff(tariff) {
         selectedTariff = tariff;
         // Обновляем визуальное выделение
@@ -368,13 +369,13 @@ border: 2px solid #c084fc;
         // Показываем кнопку оплаты
         payButtonContainer.style.display = 'block';
     }
-
+    
     function processPayment() {
         if (!selectedTariff) {
             alert('Пожалуйста, выберите тариф');
             return;
         }
-
+        
         if (window.Telegram && window.Telegram.WebApp) {
             const tg = window.Telegram.WebApp;
             tg.sendData(JSON.stringify({
@@ -390,7 +391,7 @@ border: 2px solid #c084fc;
             alert(`Для оплаты ${selectedTariff.name} - ${selectedTariff.price} откройте это приложение в Telegram`);
         }
     }
-
+    
     function renderPlansList() {
         const container = document.getElementById('plansList');
         if (!container) return;
@@ -403,6 +404,8 @@ border: 2px solid #c084fc;
             div.innerHTML = `
                 <span class="tariff-name">${t.name}<br><span style="font-size: 11px; color:#a78bfa;">${t.days} дней</span></span>
                 <span class="tariff-price">${t.price}</span>
+
+> ㅤMiroslav:
 `;
             div.onclick = (function(tariff) {
                 return function() { selectTariff(tariff); };
@@ -410,13 +413,13 @@ border: 2px solid #c084fc;
             container.appendChild(div);
         }
     }
-
+    
     function showPage(pageNumber) {
         document.getElementById('page1').classList.remove('show');
         document.getElementById('page2').classList.remove('show');
         document.getElementById('page3').classList.remove('show');
         document.getElementById('page' + pageNumber).classList.add('show');
-
+        
         const navItems = document.querySelectorAll('.nav-item');
         for (let i = 0; i < navItems.length; i++) {
             navItems[i].classList.remove('active');
@@ -424,20 +427,20 @@ border: 2px solid #c084fc;
                 navItems[i].classList.add('active');
             }
         }
-
+        
         if (pageNumber === 2) {
             renderPlansList();
             payButtonContainer.style.display = 'none';
             selectedTariff = null;
         }
     }
-
+    
     renderPlansList();
     updateStatus();
-
+    
     activateBtn.onclick = function() { showPage(2); };
     payBtn.onclick = processPayment;
-
+    
     const navItems = document.querySelectorAll('.nav-item');
     for (let i = 0; i < navItems.length; i++) {
         navItems[i].onclick = function() {
@@ -445,7 +448,7 @@ border: 2px solid #c084fc;
             showPage(pageNum);
         };
     }
-
+    
     if (window.Telegram && window.Telegram.WebApp) {
         const tg = window.Telegram.WebApp;
         tg.expand();
