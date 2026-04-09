@@ -370,26 +370,28 @@ border: 2px solid #c084fc;
     }
     
     function processPayment() {
-        if (!selectedTariff) {
-            alert('Пожалуйста, выберите тариф');
-            return;
-        }
-        
-        if (window.Telegram && window.Telegram.WebApp) {
-            const tg = window.Telegram.WebApp;
-            tg.sendData(JSON.stringify({
-                action: 'payment',
-                plan: selectedTariff.name,
-                amount: selectedTariff.price,
-                days: selectedTariff.days,
-                user_id: tg.initDataUnsafe?.user?.id,
-                username: tg.initDataUnsafe?.user?.username
-            }));
-            tg.showAlert(`Переход к оплате ${selectedTariff.name} - ${selectedTariff.price}`);
-        } else {
-            alert(`Для оплаты ${selectedTariff.name} - ${selectedTariff.price} откройте это приложение в Telegram`);
-        }
+    if (!selectedTariff) {
+        alert('Пожалуйста, выберите тариф');
+        return;
     }
+    
+    if (window.Telegram && window.Telegram.WebApp) {
+        const tg = window.Telegram.WebApp;
+        tg.sendData(JSON.stringify({
+            action: 'payment',
+            plan: selectedTariff.name,
+            amount: selectedTariff.price,
+            days: selectedTariff.days,
+            user_id: tg.initDataUnsafe?.user?.id,
+            username: tg.initDataUnsafe?.user?.username
+        }));
+        tg.showAlert('✅ Ссылка на оплату придёт в чат с ботом!');
+        setTimeout(() => tg.close(), 1500);
+    } else {
+        alert(`Для оплаты ${selectedTariff.name} - ${selectedTariff.price} откройте это приложение в Telegram`);
+    }
+}
+
     
     function renderPlansList() {
         const container = document.getElementById('plansList');
