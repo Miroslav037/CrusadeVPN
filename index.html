@@ -321,55 +321,53 @@ border: 2px solid #c084fc;
 </div>
 
 <script>
-    let isSubscribed = false;
-    let selectedTariff = null;
-    
-    const tariffs = [
-        { name: "пробный", price: "49 ₽", days: 5 },
-        { name: "1 месяц", price: "149 ₽", days: 30 },
-        { name: "3 месяца", price: "399 ₽", days: 90 },
-        { name: "6 месяцев", price: "749 ₽", days: 180 },
-        { name: "12 месяцев", price: "1349 ₽", days: 365 }
-    ];
-    
-    const statusLed = document.getElementById('statusLed');
-    const statusTextSpan = document.getElementById('statusText');
-    const activateBtn = document.getElementById('activateBtn');
-    const payButtonContainer = document.getElementById('payButtonContainer');
-    const payBtn = document.getElementById('payBtn');
-    
-    function updateStatus() {
-        if (isSubscribed) {
-            statusLed.classList.add('active');
-            statusTextSpan.innerText = "Активна до " + getExpiryDate();
-            activateBtn.innerText = "Продлить";
-        } else {
-            statusLed.classList.remove('active');
-            statusTextSpan.innerText = "Не активна";
-            activateBtn.innerText = "Активировать";
+let isSubscribed = false;
+let selectedTariff = null;
+
+const tariffs = [
+    { name: "пробный", price: 49, priceDisplay: "49 ₽", days: 5 },
+    { name: "1 месяц", price: 149, priceDisplay: "149 ₽", days: 30 },
+    { name: "3 месяца", price: 399, priceDisplay: "399 ₽", days: 90 },
+    { name: "6 месяцев", price: 749, priceDisplay: "749 ₽", days: 180 },
+    { name: "12 месяцев", price: 1349, priceDisplay: "1349 ₽", days: 365 }
+];
+
+const statusLed = document.getElementById('statusLed');
+const statusTextSpan = document.getElementById('statusText');
+const activateBtn = document.getElementById('activateBtn');
+const payButtonContainer = document.getElementById('payButtonContainer');
+const payBtn = document.getElementById('payBtn');
+
+function updateStatus() {
+    if (isSubscribed) {
+        statusLed.classList.add('active');
+        statusTextSpan.innerText = "Активна до " + getExpiryDate();
+        activateBtn.innerText = "Продлить";
+    } else {
+        statusLed.classList.remove('active');
+        statusTextSpan.innerText = "Не активна";
+        activateBtn.innerText = "Активировать";
+    }
+}
+
+function getExpiryDate() {
+    let d = new Date();
+    d.setMonth(d.getMonth() + 1);
+    return d.toLocaleDateString();
+}
+
+function selectTariff(tariff) {
+    selectedTariff = tariff;
+    document.querySelectorAll('.tariff-btn').forEach(btn => {
+        btn.classList.remove('selected');
+        if (btn.getAttribute('data-name') === tariff.name) {
+            btn.classList.add('selected');
         }
-    }
-    
-    function getExpiryDate() {
-        let d = new Date();
-        d.setMonth(d.getMonth() + 1);
-        return d.toLocaleDateString();
-    }
-    
-    function selectTariff(tariff) {
-        selectedTariff = tariff;
-        // Обновляем визуальное выделение
-        document.querySelectorAll('.tariff-btn').forEach(btn => {
-            btn.classList.remove('selected');
-            if (btn.getAttribute('data-name') === tariff.name) {
-                btn.classList.add('selected');
-            }
-        });
-        // Показываем кнопку оплаты
-        payButtonContainer.style.display = 'block';
-    }
-    
-    function processPayment() {
+    });
+    payButtonContainer.style.display = 'block';
+}
+
+function processPayment() {
     if (!selectedTariff) {
         alert('Пожалуйста, выберите тариф');
         return;
@@ -378,82 +376,72 @@ border: 2px solid #c084fc;
     if (window.Telegram && window.Telegram.WebApp) {
         const tg = window.Telegram.WebApp;
         tg.sendData(JSON.stringify({
-            action: 'payment',
-            plan: selectedTariff.name,
-            amount: selectedTariff.price,
-            days: selectedTariff.days,
-            user_id: tg.initDataUnsafe?.user?.id,
-            username: tg.initDataUnsafe?.user?.username
+            tariff: selectedTariff.name,
+            price: selectedTariff.price,
+            days: selectedTariff.days
         }));
-        tg.showAlert('✅ Ссылка на оплату придёт в чат с ботом!');
-        setTimeout(() => tg.close(), 1500);
+        tg.close();
     } else {
-        alert(`Для оплаты ${selectedTariff.name} - ${selectedTariff.price} откройте это приложение в Telegram`);
+        alert('Откройте это приложение в Telegram');
     }
 }
 
-    
-    function renderPlansList() {
-        const container = document.getElementById('plansList');
-        if (!container) return;
-        container.innerHTML = "";
-        for (let i = 0; i < tariffs.length; i++) {
-            const t = tariffs[i];
-            const div = document.createElement('div');
-            div.className = 'tariff-btn';
-            div.setAttribute('data-name', t.name);
-            div.innerHTML = `
-                <span class="tariff-name">${t.name}<br><span style="font-size: 11px; color:#a78bfa;">${t.days} дней</span></span>
-                <span class="tariff-price">${t.price}</span>
+function renderPlansList() {
+    const container = document.getElementById('plansList');
+    if (!container) return;
+    container.innerHTML = "";
+    for (let i = 0; i < tariffs.length; i++) {
+        const t = tariffs[i];
+        const div = document.createElement('div');
+        div.className = 'tariff-btn';
+        div.setAttribute('data-name', t.name);
+        div.innerHTML = `
+            <span class="tariff-name">${t.name}<br><span style="font-size: 11px; color:#a78bfa;">${t.days} дней</span></span>
+            <span class="tariff-price">${t.priceDisplay}</span>
+        `;
+        div.onclick = (function(tariff) {
+            return function() { selectTariff(tariff); };
+        })(t);
+        container.appendChild(div);
+    }
+}
 
-`;
-            div.onclick = (function(tariff) {
-                return function() { selectTariff(tariff); };
-            })(t);
-            container.appendChild(div);
-        }
-    }
-    
-    function showPage(pageNumber) {
-        document.getElementById('page1').classList.remove('show');
-        document.getElementById('page2').classList.remove('show');
-        document.getElementById('page3').classList.remove('show');
-        document.getElementById('page' + pageNumber).classList.add('show');
-        
-        const navItems = document.querySelectorAll('.nav-item');
-        for (let i = 0; i < navItems.length; i++) {
-            navItems[i].classList.remove('active');
-            if (parseInt(navItems[i].getAttribute('data-page')) === pageNumber) {
-                navItems[i].classList.add('active');
-            }
-        }
-        
-        if (pageNumber === 2) {
-            renderPlansList();
-            payButtonContainer.style.display = 'none';
-            selectedTariff = null;
-        }
-    }
-    
-    renderPlansList();
-    updateStatus();
-    
-    activateBtn.onclick = function() { showPage(2); };
-    payBtn.onclick = processPayment;
+function showPage(pageNumber) {
+    document.getElementById('page1').classList.remove('show');
+    document.getElementById('page2').classList.remove('show');
+    document.getElementById('page3').classList.remove('show');
+    document.getElementById('page' + pageNumber).classList.add('show');
     
     const navItems = document.querySelectorAll('.nav-item');
     for (let i = 0; i < navItems.length; i++) {
-        navItems[i].onclick = function() {
-            const pageNum = parseInt(this.getAttribute('data-page'));
-            showPage(pageNum);
-        };
+        navItems[i].classList.remove('active');
+        if (parseInt(navItems[i].getAttribute('data-page')) === pageNumber) {
+            navItems[i].classList.add('active');
+        }
     }
     
-    if (window.Telegram && window.Telegram.WebApp) {
-        const tg = window.Telegram.WebApp;
-        tg.expand();
-        tg.enableClosingConfirmation();
+    if (pageNumber === 2) {
+        renderPlansList();
+        payButtonContainer.style.display = 'none';
+        selectedTariff = null;
     }
-</script>
-</body>
-</html>
+}
+
+renderPlansList();
+updateStatus();
+
+activateBtn.onclick = function() { showPage(2); };
+payBtn.onclick = processPayment;
+
+const navItems = document.querySelectorAll('.nav-item');
+for (let i = 0; i < navItems.length; i++) {
+    navItems[i].onclick = function() {
+        const pageNum = parseInt(this.getAttribute('data-page'));
+        showPage(pageNum);
+    };
+}
+
+if (window.Telegram && window.Telegram.WebApp) {
+    const tg = window.Telegram.WebApp;
+    tg.expand();
+}
