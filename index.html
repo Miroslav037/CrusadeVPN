@@ -386,15 +386,14 @@ border: 2px solid #c084fc;
                 days: selectedTariff.days
             }));
         
-            
             // Закрываем WebApp
-            
+            setTimeout(() => {
+                tg.close();
+            }, 700);
         } else {
             alert('Откройте это приложение в Telegram');
         }
     }
-            
-            // Закрываем WebApp
        
     
     function renderPlansList() {
