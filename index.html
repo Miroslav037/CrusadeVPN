@@ -379,20 +379,16 @@ border: 2px solid #c084fc;
     if (window.Telegram && window.Telegram.WebApp) {
         const tg = window.Telegram.WebApp;
         
-        tg.sendData(JSON.stringify({
-            tariff: selectedTariff.name,
-            price: selectedTariff.price,
-            days: selectedTariff.days
-        }));
+        // Формируем данные
+        const tariff = selectedTariff.name;
+        const price = selectedTariff.price;
+        const days = selectedTariff.days;
         
-        // Показываем алерт и закрываем после нажатия ОК
-        tg.showPopup({
-            title: "✅ Готово",
-            message: "Ссылка на оплату отправлена в чат!",
-            buttons: [{type: "ok"}]
-        }, () => {
-            tg.close();
-        });
+        // Отправляем данные через ссылку (работает везде)
+        tg.openTelegramLink(`https://t.me/CrusadeVPNbot?start=buy_${tariff}_${price}_${days}`);
+        
+        // Закрываем WebApp
+        tg.close();
         
     } else {
         alert('Откройте это приложение в Telegram');
