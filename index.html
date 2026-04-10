@@ -371,29 +371,40 @@ border: 2px solid #c084fc;
     
     // ====== ИСПРАВЛЕНО ЗДЕСЬ: правильная отправка данных ======
     function processPayment() {
-        if (!selectedTariff) {
-            alert('Пожалуйста, выберите тариф');
-            return;
-        }
-        
-        if (window.Telegram && window.Telegram.WebApp) {
-            const tg = window.Telegram.WebApp;
-            
-            // Отправляем ТОЛЬКО нужные данные и ТОЛЬКО числа
-            tg.sendData(JSON.stringify({
-                tariff: selectedTariff.name,
-                price: selectedTariff.price,
-                days: selectedTariff.days
-            }));
-            
-            // Закрываем WebApp
-            setTimeout(() => {
-                tg.close();
-            }, 700);
-        } else {
-            alert('Откройте это приложение в Telegram');
-        }
+    if (!selectedTariff) {
+        alert('Пожалуйста, выберите тариф');
+        return;
     }
+
+    if (window.Telegram && window.Telegram.WebApp) {
+        const tg = window.Telegram.WebApp;
+        
+        // 1. Отправляем данные боту
+        tg.sendData(JSON.stringify({
+            tariff: selectedTariff.name,
+            price: selectedTariff.price,
+            days: selectedTariff.days
+        }));
+
+        // 2. Показываем красивое сообщение
+        tg.showPopup({
+            title: '✅ Запрос отправлен!',
+            message: 'Ссылка на оплату уже ждёт вас в чате с ботом.\n\nНажмите "Закрыть" и вернитесь в бот 👇',
+            buttons: [{
+                type: 'close'
+            }]
+        });
+
+        // 3. Меняем текст кнопки оплаты
+        payBtn.innerText = '📱 ПЕРЕЙТИ В БОТА';
+        payBtn.onclick = function() {
+            tg.close();
+        };
+        
+    } else {
+        alert('Откройте это приложение в Telegram');
+    }
+}
        
     
     function renderPlansList() {
