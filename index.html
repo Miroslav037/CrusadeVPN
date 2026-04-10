@@ -370,42 +370,45 @@ border: 2px solid #c084fc;
     }
     
     // ====== ИСПРАВЛЕНО ЗДЕСЬ: правильная отправка данных ======
-    async function processPayment() {
+    function processPayment() {
     if (!selectedTariff) {
         alert('Пожалуйста, выберите тариф');
         return;
     }
 
-    const payBtn = document.getElementById('payBtn');
-    payBtn.disabled = true;
-    payBtn.textContent = '⏳ Создаём оплату...';
+    if (!window.Telegram?.WebApp) {
+        alert('❌ Откройте в Telegram!');
+        return;
+    }
 
     const tg = window.Telegram.WebApp;
-    const user_id = tg.initDataUnsafe?.user?.id;
-
+    
+    const paymentData = JSON.stringify({
+        tariff: selectedTariff.name,
+        price: selectedTariff.price,
+        days: selectedTariff.days
+    });
+    
+    // Метод 1: Пробуем отправить и ждём
     try {
-        const response = await fetch('https://trickily-traction-unfunded.ngrok-free.dev', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                tariff: selectedTariff.name,
-                price: selectedTariff.price,
-                days: selectedTariff.days,
-                telegram_id: user_id
-            })
+        tg.sendData(paymentData);
+        
+        // Показываем уведомление пользователю
+        tg.showPopup({
+            title: '✅ Заказ оформлен',
+            message: 'Ссылка на оплату появится в чате с ботом',
+            buttons: [{
+                type: 'ok',
+                text: 'OK'
+            }]
+        }, function() {
+            // Закрываем ТОЛЬКО после нажатия OK
+            setTimeout(() => tg.close(), 300);
         });
-
-        const result = await response.json();
-
-        if (result.success) {
-            payBtn.textContent = '🔄 Открываем оплату...';
-            tg.openLink(result.payment_url);
-        } else {
-            alert('Ошибка создания платежа');
-        }
-    } catch (e) {
-        alert('Не удалось соединиться с сервером. Попробуйте позже.');
-        console.error(e);
+        
+    } catch (error) {
+        console.error('Ошибка отправки:', error);
+        alert('Ошибка! Попробуйте ещё раз');
     }
 }
        
