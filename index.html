@@ -371,29 +371,35 @@ border: 2px solid #c084fc;
     
     // ====== ИСПРАВЛЕНО ЗДЕСЬ: правильная отправка данных ======
     function processPayment() {
-        if (!selectedTariff) {
-            alert('Пожалуйста, выберите тариф');
-            return;
-        }
-        
-        if (window.Telegram && window.Telegram.WebApp) {
-            const tg = window.Telegram.WebApp;
-            
-            // Отправляем ТОЛЬКО нужные данные и ТОЛЬКО числа
-            tg.sendData(JSON.stringify({
-                tariff: selectedTariff.name,
-                price: selectedTariff.price,
-                days: selectedTariff.days
-            }));
-        
-            // Закрываем WebApp
-            setTimeout(() => {
-                tg.close();
-            }, 700);
-        } else {
-            alert('Откройте это приложение в Telegram');
-        }
+    if (!selectedTariff) {
+        alert('Пожалуйста, выберите тариф!');
+        return;
     }
+
+    const payBtn = document.getElementById('payBtn');
+    payBtn.disabled = true;
+    payBtn.style.background = '#eab308';
+    payBtn.textContent = '⏳ Отправляю данные в бот...';
+
+    const tg = window.Telegram.WebApp;
+
+    const payload = {
+        action: "create_payment",
+        tariff: selectedTariff.name,
+        price: selectedTariff.price,
+        days: selectedTariff.days
+    };
+
+    console.log("Отправляю в бот:", payload); // для отладки в браузере
+
+    tg.sendData(JSON.stringify(payload));
+
+    // Показываем пользователю, что данные ушли
+    setTimeout(() => {
+        payBtn.textContent = '✅ Данные отправлены!\nЗакрой крестиком и проверь чат с ботом';
+        payBtn.style.background = '#22c55e';
+    }, 1200);
+}
        
     
     function renderPlansList() {
