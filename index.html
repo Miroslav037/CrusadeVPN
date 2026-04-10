@@ -6,12 +6,12 @@
     <title>Crusade VPN - Защитник сети</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        /* ВСЕ ВАШИ СТИЛИ ОСТАВЬТЕ БЕЗ ИЗМЕНЕНИЙ */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
+
         body {
             background: linear-gradient(135deg, #0a0a0f 0%, #1a0f2e 100%);
             font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
@@ -20,26 +20,38 @@
             padding-bottom: 100px;
             min-height: 100vh;
         }
+
         .container {
             max-width: 500px;
             margin: 0 auto;
         }
+
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
+
         @keyframes pulse {
             0%, 100% { opacity: 1; }
             50% { opacity: 0.5; }
         }
+
         @keyframes float {
             0%, 100% { transform: translateY(0px); }
             50% { transform: translateY(-5px); }
         }
+
         @keyframes glow {
             0%, 100% { box-shadow: 0 0 5px rgba(192, 132, 252, 0.5); }
             50% { box-shadow: 0 0 20px rgba(192, 132, 252, 0.8); }
         }
+
         .card {
             background: rgba(30, 25, 55, 0.8);
             backdrop-filter: blur(10px);
@@ -50,17 +62,20 @@
             animation: fadeInUp 0.5s ease-out;
             transition: all 0.3s ease;
         }
+
         .header {
             text-align: center;
             margin-bottom: 24px;
             animation: fadeInUp 0.5s ease-out;
         }
+
         .icon {
             font-size: 56px;
             margin-bottom: 12px;
             display: inline-block;
             animation: float 3s ease-in-out infinite;
         }
+
         h1 {
             font-size: 28px;
             background: linear-gradient(135deg, #ffffff, #c084fc, #a855f7);
@@ -69,11 +84,13 @@
             color: transparent;
             margin-bottom: 6px;
         }
+
         .sub {
             color: #a78bfa;
             font-size: 13px;
             letter-spacing: 1px;
         }
+
         .status {
             display: flex;
             align-items: center;
@@ -84,11 +101,13 @@
             margin-bottom: 20px;
             border: 1px solid rgba(156, 108, 215, 0.2);
         }
+
         .status-left {
             display: flex;
             align-items: center;
             gap: 10px;
         }
+
         .led {
             width: 10px;
             height: 10px;
@@ -96,13 +115,16 @@
             background: #ef4444;
             animation: pulse 2s ease-in-out infinite;
         }
+
         .led.active {
             background: #22c55e;
             box-shadow: 0 0 8px #22c55e;
         }
+
         .status-text {
             font-weight: 500;
         }
+
         .activate-link {
             color: #c084fc;
             text-decoration: none;
@@ -112,6 +134,7 @@
             border-radius: 30px;
             transition: all 0.2s;
         }
+
         .tariff-btn {
             background: linear-gradient(135deg, #1e1a2e 0%, #2d1b4e 100%);
             border: 1px solid rgba(156, 108, 215, 0.4);
@@ -126,24 +149,30 @@
             position: relative;
             overflow: hidden;
         }
+
         .tariff-btn.selected {
-            border: 2px solid #c084fc;
+
+border: 2px solid #c084fc;
             background: linear-gradient(135deg, #2d1b4e 0%, #3d2068 100%);
             box-shadow: 0 0 15px rgba(192, 132, 252, 0.4);
         }
+
         .tariff-name {
             font-weight: 700;
             font-size: 16px;
         }
+
         .tariff-price {
             color: #e9c0ff;
             font-weight: 800;
             font-size: 20px;
         }
+
         .pay-button-container {
             margin-top: 20px;
             text-align: center;
         }
+
         .pay-btn {
             background: linear-gradient(135deg, #c084fc, #a855f7);
             border: none;
@@ -157,15 +186,18 @@
             transition: all 0.25s ease;
             animation: glow 2s infinite;
         }
+
         .pay-btn:active {
             transform: scale(0.98);
         }
+
         .pay-btn.disabled {
             background: #4a4a5a;
             animation: none;
             cursor: not-allowed;
             opacity: 0.6;
         }
+
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -182,6 +214,7 @@
             width: 100%;
             z-index: 100;
         }
+
         .nav-item {
             text-align: center;
             cursor: pointer;
@@ -190,25 +223,31 @@
             transition: all 0.2s ease;
             color: #7c6b8f;
         }
+
         .nav-item.active {
             color: #c084fc;
             background: rgba(192, 132, 252, 0.15);
         }
+
         .nav-icon {
             font-size: 24px;
             display: block;
             margin-bottom: 4px;
         }
+
         .nav-label {
             font-size: 11px;
         }
+
         .page {
             display: none;
             animation: fadeInUp 0.4s ease-out;
         }
+
         .page.show {
             display: block;
         }
+
         .help-step {
             background: rgba(30, 25, 55, 0.6);
             border-radius: 18px;
@@ -219,6 +258,7 @@
     </style>
 </head>
 <body>
+
 <div class="container">
     <!-- ГЛАВНАЯ СТРАНИЦА -->
     <div id="page1" class="page show">
@@ -227,6 +267,7 @@
             <h1>CRUSADE VPN</h1>
             <div class="sub">Защитник сети • Непоколебимая защита</div>
         </div>
+
         <div class="card">
             <div class="status">
                 <div class="status-left">
@@ -256,7 +297,8 @@
     <div id="page3" class="page">
         <div class="card">
             <h2 style="margin-bottom: 20px; text-align: center;">📘 Как использовать</h2>
-            <div class="help-step"><b>1️⃣ Купите подписку</b><br>Выберите тариф и оплатите через ЮKassa</div>
+
+<div class="help-step"><b>1️⃣ Купите подписку</b><br>Выберите тариф и оплатите через ЮKassa</div>
             <div class="help-step"><b>2️⃣ Получите ключ в боте</b><br>После оплаты бот пришлёт вам конфиг</div>
             <div class="help-step"><b>3️⃣ Импортируйте в приложение</b><br>Happ, v2rayNG, Nekobox или любой другой клиент</div>
             <div class="help-step"><b>4️⃣ Включите защиту</b><br>Готово — вы под надёжной защитой</div>
@@ -280,122 +322,140 @@
 </div>
 
 <script>
-let isSubscribed = false;
-let selectedTariff = null;
-
-const tariffs = [
-    { name: "пробный", price: 49, priceDisplay: "49 ₽", days: 5 },
-    { name: "1 месяц", price: 149, priceDisplay: "149 ₽", days: 30 },
-    { name: "3 месяца", price: 399, priceDisplay: "399 ₽", days: 90 },
-    { name: "6 месяцев", price: 749, priceDisplay: "749 ₽", days: 180 },
-    { name: "12 месяцев", price: 1349, priceDisplay: "1349 ₽", days: 365 }
-];
-
-const statusLed = document.getElementById('statusLed');
-const statusTextSpan = document.getElementById('statusText');
-const activateBtn = document.getElementById('activateBtn');
-const payButtonContainer = document.getElementById('payButtonContainer');
-const payBtn = document.getElementById('payBtn');
-
-function updateStatus() {
-    if (isSubscribed) {
-        statusLed.classList.add('active');
-        statusTextSpan.innerText = "Активна до " + getExpiryDate();
-        activateBtn.innerText = "Продлить";
-    } else {
-        statusLed.classList.remove('active');
-        statusTextSpan.innerText = "Не активна";
-        activateBtn.innerText = "Активировать";
-    }
-}
-
-function getExpiryDate() {
-    let d = new Date();
-    d.setMonth(d.getMonth() + 1);
-    return d.toLocaleDateString();
-}
-
-function selectTariff(tariff) {
-    selectedTariff = tariff;
-    document.querySelectorAll('.tariff-btn').forEach(btn => {
-        btn.classList.remove('selected');
-        if (btn.getAttribute('data-name') === tariff.name) {
-            btn.classList.add('selected');
-        }
-    });
-    payButtonContainer.style.display = 'block';
-}
-
-function processPayment() {
-    if (!selectedTariff) {
-        alert('Пожалуйста, выберите тариф');
-        return;
-    }
-
-    // Формируем ссылку на бота с параметрами
-    const botUrl = https://t.me/CrusadeVPNbot?start=${selectedTariff.name}_${selectedTariff.price}_${selectedTariff.days};
+    let isSubscribed = false;
+    let selectedTariff = null;
     
-    // Открываем бота
-    window.location.href = botUrl;
-}
-
-function renderPlansList() {
-    const container = document.getElementById('plansList');
-    if (!container) return;
-    container.innerHTML = "";
-    for (let i = 0; i < tariffs.length; i++) {
-        const t = tariffs[i];
-        const div = document.createElement('div');
-        div.className = 'tariff-btn';
-        div.setAttribute('data-name', t.name);
-        div.innerHTML = `
-            <span class="tariff-name">${t.name}<br><span style="font-size: 11px; color:#a78bfa;">${t.days} дней</span></span>
-            <span class="tariff-price">${t.priceDisplay}</span>
-        `;
-        div.onclick = (function(tariff) {
-            return function() { selectTariff(tariff); };
-        })(t);
-        container.appendChild(div);
+    // ====== ИСПРАВЛЕНО ЗДЕСЬ: цена числом, отображение строкой ======
+    const tariffs = [
+        { name: "пробный", price: 49, priceDisplay: "49 ₽", days: 5 },
+        { name: "1 месяц", price: 149, priceDisplay: "149 ₽", days: 30 },
+        { name: "3 месяца", price: 399, priceDisplay: "399 ₽", days: 90 },
+        { name: "6 месяцев", price: 749, priceDisplay: "749 ₽", days: 180 },
+        { name: "12 месяцев", price: 1349, priceDisplay: "1349 ₽", days: 365 }
+    ];
+    
+    const statusLed = document.getElementById('statusLed');
+    const statusTextSpan = document.getElementById('statusText');
+    const activateBtn = document.getElementById('activateBtn');
+    const payButtonContainer = document.getElementById('payButtonContainer');
+    const payBtn = document.getElementById('payBtn');
+    
+    function updateStatus() {
+        if (isSubscribed) {
+            statusLed.classList.add('active');
+            statusTextSpan.innerText = "Активна до " + getExpiryDate();
+            activateBtn.innerText = "Продлить";
+        } else {
+            statusLed.classList.remove('active');
+            statusTextSpan.innerText = "Не активна";
+            activateBtn.innerText = "Активировать";
+        }
     }
-}
+    
+    function getExpiryDate() {
+        let d = new Date();
+        d.setMonth(d.getMonth() + 1);
+        return d.toLocaleDateString();
+    }
+    
+    function selectTariff(tariff) {
+        selectedTariff = tariff;
+        document.querySelectorAll('.tariff-btn').forEach(btn => {
+            btn.classList.remove('selected');
+            if (btn.getAttribute('data-name') === tariff.name) {
+                btn.classList.add('selected');
+            }
+        });
+        payButtonContainer.style.display = 'block';
+    }
+    
+    // ====== ИСПРАВЛЕНО ЗДЕСЬ: правильная отправка данных ======
+    function processPayment() {
+        if (!selectedTariff) {
+            alert('Пожалуйста, выберите тариф');
+            return;
+        }
+        
+        if (window.Telegram && window.Telegram.WebApp) {
+            const tg = window.Telegram.WebApp;
+            
+            // Отправляем ТОЛЬКО нужные данные и ТОЛЬКО числа
+            tg.sendData(JSON.stringify({
+                tariff: selectedTariff.name,
+                price: selectedTariff.price,
+                days: selectedTariff.days
+            }));
+            
+            // Закрываем WebApp
+            setTimeout(() => {
+                tg.close();
+            }, 700);
+        } else {
+            alert('Откройте это приложение в Telegram');
+        }
+    }
+    
+    function renderPlansList() {
+        const container = document.getElementById('plansList');
+        if (!container) return;
+        container.innerHTML = "";
+        for (let i = 0; i < tariffs.length; i++) {
+            const t = tariffs[i];
+            const div = document.createElement('div');
+            div.className = 'tariff-btn';
+            div.setAttribute('data-name', t.name);
+            div.innerHTML = `
+                <span class="tariff-name">${t.name}<br><span style="font-size: 11px; color:#a78bfa;">${t.days} дней</span></span>
 
-function showPage(pageNumber) {
-    document.getElementById('page1').classList.remove('show');
-    document.getElementById('page2').classList.remove('show');
-    document.getElementById('page3').classList.remove('show');
-    document.getElementById('page' + pageNumber).classList.add('show');
+<span class="tariff-price">${t.priceDisplay}</span>
+            `;
+            div.onclick = (function(tariff) {
+                return function() { selectTariff(tariff); };
+            })(t);
+            container.appendChild(div);
+        }
+    }
+    
+    function showPage(pageNumber) {
+        document.getElementById('page1').classList.remove('show');
+        document.getElementById('page2').classList.remove('show');
+        document.getElementById('page3').classList.remove('show');
+        document.getElementById('page' + pageNumber).classList.add('show');
+        
+        const navItems = document.querySelectorAll('.nav-item');
+        for (let i = 0; i < navItems.length; i++) {
+            navItems[i].classList.remove('active');
+            if (parseInt(navItems[i].getAttribute('data-page')) === pageNumber) {
+                navItems[i].classList.add('active');
+            }
+        }
+        
+        if (pageNumber === 2) {
+            renderPlansList();
+            payButtonContainer.style.display = 'none';
+            selectedTariff = null;
+        }
+    }
+    
+    renderPlansList();
+    updateStatus();
+    
+    activateBtn.onclick = function() { showPage(2); };
+    payBtn.onclick = processPayment;
+    
     const navItems = document.querySelectorAll('.nav-item');
     for (let i = 0; i < navItems.length; i++) {
-        navItems[i].classList.remove('active');
-        if (parseInt(navItems[i].getAttribute('data-page')) === pageNumber) {
-            navItems[i].classList.add('active');
-        }
+        navItems[i].onclick = function() {
+            const pageNum = parseInt(this.getAttribute('data-page'));
+            showPage(pageNum);
+        };
     }
-    if (pageNumber === 2) {
-        renderPlansList();
-        payButtonContainer.style.display = 'none';
-        selectedTariff = null;
+    
+    if (window.Telegram && window.Telegram.WebApp) {
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+        tg.enableClosingConfirmation();
     }
-}
-
-renderPlansList();
-updateStatus();
-activateBtn.onclick = function() { showPage(2); };
-payBtn.onclick = processPayment;
-
-const navItems = document.querySelectorAll('.nav-item');
-for (let i = 0; i < navItems.length; i++) {
-    navItems[i].onclick = function() {
-        const pageNum = parseInt(this.getAttribute('data-page'));
-        showPage(pageNum);
-    };
-}
-
-if (window.Telegram && window.Telegram.WebApp) {
-    const tg = window.Telegram.WebApp;
-    tg.expand();
-    tg.enableClosingConfirmation();
-}
 </script>
 </body>
 </html>
