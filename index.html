@@ -371,46 +371,29 @@ border: 2px solid #c084fc;
     
     // ====== ИСПРАВЛЕНО ЗДЕСЬ: правильная отправка данных ======
     function processPayment() {
-    if (!selectedTariff) {
-        alert('Пожалуйста, выберите тариф');
-        return;
-    }
-    
-    if (window.Telegram && window.Telegram.WebApp) {
-        const tg = window.Telegram.WebApp;
+        if (!selectedTariff) {
+            alert('Пожалуйста, выберите тариф');
+            return;
+        }
         
-        // Пробуем отправить данные (работает на ПК)
-        try {
+        if (window.Telegram && window.Telegram.WebApp) {
+            const tg = window.Telegram.WebApp;
+            
+            // Отправляем ТОЛЬКО нужные данные и ТОЛЬКО числа
             tg.sendData(JSON.stringify({
                 tariff: selectedTariff.name,
                 price: selectedTariff.price,
                 days: selectedTariff.days
             }));
-        } catch(e) {
-            console.log('sendData не сработал');
+            
+            // Закрываем WebApp
+            setTimeout(() => {
+                tg.close();
+            }, 700);
+        } else {
+            alert('Откройте это приложение в Telegram');
         }
-        
-        // Показываем кнопку для получения счёта (для телефона)
-        tg.showPopup({
-            title: "✅ Почти готово",
-            message: "Нажмите кнопку ниже, чтобы получить счёт на оплату",
-            buttons: [
-                {
-                    type: "default",
-                    text: "💳 Получить счёт",
-                    url: https://t.me/CrusadeVPNbot?start=${selectedTariff.name}_${selectedTariff.price}_${selectedTariff.days}
-                },
-                {
-                    type: "cancel",
-                    text: "Закрыть"
-                }
-            ]
-        });
-        
-    } else {
-        alert('Откройте это приложение в Telegram');
     }
-}
     
     function renderPlansList() {
         const container = document.getElementById('plansList');
