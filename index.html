@@ -332,17 +332,11 @@ function processPayment() {
         return;
     }
 
-    if (window.Telegram && window.Telegram.WebApp) {
-        const tg = window.Telegram.WebApp;
-        tg.sendData(JSON.stringify({
-            tariff: selectedTariff.name,
-            price: selectedTariff.price,
-            days: selectedTariff.days
-        }));
-        tg.close();
-    } else {
-        alert('Откройте это приложение в Telegram');
-    }
+    // Формируем ссылку на бота с параметрами
+    const botUrl = https://t.me/CrusadeVPNbot?start=${selectedTariff.name}_${selectedTariff.price}_${selectedTariff.days};
+    
+    // Открываем бота
+    window.location.href = botUrl;
 }
 
 function renderPlansList() {
