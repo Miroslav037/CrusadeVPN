@@ -1,7 +1,7 @@
 <script>
 let isSubscribed = false;
 let selectedTariff = null;
-let tg = window.Telegram?.WebApp;
+const tg = window.Telegram?.WebApp;
 
 const tariffs = [
     { name: "пробный", price: 49, priceDisplay: "49 ₽", days: 5 },
@@ -46,26 +46,29 @@ function selectTariff(tariff) {
     payButtonContainer.style.display = 'block';
 }
 
-// ====== НОВАЯ ФУНКЦИЯ - ПЕРЕХОД В БОТА С ПАРАМЕТРАМИ ======
 function processPayment() {
     if (!selectedTariff) {
         alert('Пожалуйста, выберите тариф');
         return;
     }
 
-    // Формируем ссылку на бота с командой /pay и параметрами
-    const botLink = https://t.me/CrusadeVPNbot?start=pay_${selectedTariff.name}_${selectedTariff.price}_${selectedTariff.days};
-    
-    // Показываем сообщение
-    alert('Сейчас вы перейдёте в бота для оплаты. Нажмите /start если бот не ответит.');
-    
-    // Открываем ссылку на бота
-    window.location.href = botLink;
-    
-    // Если в Telegram WebApp - используем специальный метод
     if (tg) {
-        tg.openTelegramLink(botLink);
-        setTimeout(() => tg.close(), 1000);
+        // Отправляем данные боту
+        tg.sendData(JSON.stringify({
+            tariff: selectedTariff.name,
+            price: selectedTariff.price,
+            days: selectedTariff.days
+        }));
+        
+        // Показываем сообщение
+        alert('✅ Запрос отправлен! Проверьте чат с ботом.');
+        
+        // Закрываем WebApp через 1 секунду
+        setTimeout(() => {
+            tg.close();
+        }, 1000);
+    } else {
+        alert('Откройте это приложение в Telegram');
     }
 }
 
