@@ -379,17 +379,21 @@ border: 2px solid #c084fc;
     if (window.Telegram && window.Telegram.WebApp) {
         const tg = window.Telegram.WebApp;
         
-        // Пробуем sendData (для ПК)
-        tg.sendData(JSON.stringify({
-            tariff: selectedTariff.name,
-            price: selectedTariff.price,
-            days: selectedTariff.days
-        }));
+        // Пробуем отправить данные (работает на ПК)
+        try {
+            tg.sendData(JSON.stringify({
+                tariff: selectedTariff.name,
+                price: selectedTariff.price,
+                days: selectedTariff.days
+            }));
+        } catch(e) {
+            console.log('sendData не сработал');
+        }
         
-        // Для телефона показываем кнопку
+        // Показываем кнопку для получения счёта (для телефона)
         tg.showPopup({
             title: "✅ Почти готово",
-            message: "Нажмите кнопку ниже, чтобы перейти в чат с ботом и получить счёт на оплату.",
+            message: "Нажмите кнопку ниже, чтобы получить счёт на оплату",
             buttons: [
                 {
                     type: "default",
