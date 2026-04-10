@@ -379,23 +379,21 @@ border: 2px solid #c084fc;
     if (window.Telegram && window.Telegram.WebApp) {
         const tg = window.Telegram.WebApp;
         
-        // Данные для отправки
-        const data = JSON.stringify({
+        tg.sendData(JSON.stringify({
             tariff: selectedTariff.name,
             price: selectedTariff.price,
             days: selectedTariff.days
+        }));
+        
+        // Показываем алерт и закрываем после нажатия ОК
+        tg.showPopup({
+            title: "✅ Готово",
+            message: "Ссылка на оплату отправлена в чат!",
+            buttons: [{type: "ok"}]
+        }, () => {
+            tg.close();
         });
         
-        // Отправляем данные
-        tg.sendData(data);
-        
-        // Принудительно даём время на отправку и закрываем
-        setTimeout(() => {
-            tg.close();
-        }, 500);
-        setTimeout(() => {
-            tg.close();
-        }, 2000);
     } else {
         alert('Откройте это приложение в Telegram');
     }
