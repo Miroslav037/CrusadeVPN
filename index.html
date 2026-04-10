@@ -372,44 +372,26 @@ border: 2px solid #c084fc;
     // ====== ИСПРАВЛЕНО ЗДЕСЬ: правильная отправка данных ======
     function processPayment() {
     if (!selectedTariff) {
-        alert('Пожалуйста, выберите тариф');
+        alert('Выберите тариф');
         return;
     }
-
-    if (!window.Telegram?.WebApp) {
-        alert('❌ Откройте в Telegram!');
-        return;
-    }
-
-    const tg = window.Telegram.WebApp;
     
-    const paymentData = JSON.stringify({
+    const tg = window.Telegram.WebApp;
+    const userId = tg.initDataUnsafe?.user?.id || 'guest';
+    
+    // Формируем URL с параметрами
+    const params = new URLSearchParams({
         tariff: selectedTariff.name,
         price: selectedTariff.price,
-        days: selectedTariff.days
+        days: selectedTariff.days,
+        user_id: userId
     });
     
-    // Метод 1: Пробуем отправить и ждём
-    try {
-        tg.sendData(paymentData);
-        
-        // Показываем уведомление пользователю
-        tg.showPopup({
-            title: '✅ Заказ оформлен',
-            message: 'Ссылка на оплату появится в чате с ботом',
-            buttons: [{
-                type: 'ok',
-                text: 'OK'
-            }]
-        }, function() {
-            // Закрываем ТОЛЬКО после нажатия OK
-            setTimeout(() => tg.close(), 300);
-        });
-        
-    } catch (error) {
-        console.error('Ошибка отправки:', error);
-        alert('Ошибка! Попробуйте ещё раз');
-    }
+    // Открываем бота с параметрами
+    tg.openTelegramLink(`https://t.me/CrusadeVPNbot?start=${params.toString()}`);
+    
+    // Закрываем WebApp
+    setTimeout(() => tg.close(), 500);
 }
        
     
