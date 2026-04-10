@@ -379,20 +379,23 @@ border: 2px solid #c084fc;
     if (window.Telegram && window.Telegram.WebApp) {
         const tg = window.Telegram.WebApp;
         
-        // Данные для отправки
-        const data = JSON.stringify({
+        // Собираем данные
+        const dataStr = JSON.stringify({
             tariff: selectedTariff.name,
             price: selectedTariff.price,
             days: selectedTariff.days
         });
         
-        // Отправляем данные
-        tg.sendData(data);
+        // Кодируем в base64
+        const encoded = btoa(unescape(encodeURIComponent(dataStr)));
         
-        // Принудительно даём время на отправку и закрываем
+        // Открываем ссылку в чат с ботом
+        tg.openTelegramLink(`https://t.me/CrusadeVPNbot?start=pay_${encoded}`);
+        
+        // Закрываем WebApp через 300 мс
         setTimeout(() => {
             tg.close();
-        }, 500);
+        }, 300);
     } else {
         alert('Откройте это приложение в Telegram');
     }
