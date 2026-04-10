@@ -379,17 +379,20 @@ border: 2px solid #c084fc;
     if (window.Telegram && window.Telegram.WebApp) {
         const tg = window.Telegram.WebApp;
         
-        // Отправляем данные
-        tg.sendData(JSON.stringify({
+        // Данные для отправки
+        const data = JSON.stringify({
             tariff: selectedTariff.name,
             price: selectedTariff.price,
             days: selectedTariff.days
-        }));
+        });
         
-        // Показываем кнопку "Закрыть" вместо автоматического закрытия
-        tg.MainButton.setText("Закрыть");
-        tg.MainButton.onClick(() => tg.close());
-        tg.MainButton.show();
+        // Отправляем данные
+        tg.sendData(data);
+        
+        // Принудительно даём время на отправку и закрываем
+        setTimeout(() => {
+            tg.close();
+        }, 500);
     } else {
         alert('Откройте это приложение в Telegram');
     }
